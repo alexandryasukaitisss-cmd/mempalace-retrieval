@@ -17,6 +17,10 @@ python3 -B -m unittest discover -s tests -v
 
 The demo shows a dispatch window changing from Tuesday to Thursday: the old index stops answering, and the fresh record can answer before the index is rebuilt.
 
+## Companion: vector identity
+
+The retrieval layer does not produce embeddings. Its logical continuation is **[Embedding Contract](https://github.com/alexandryasukaitisss-cmd/embedding-contract)**: provider-neutral identity, safe backfill, local Gemma via Ollama, and an explicit Gemini adapter. Use it to ensure that only vectors from the same model, dimensions, and prompt contract share an index.
+
 ## Use it in your own store
 
 ~~~python
