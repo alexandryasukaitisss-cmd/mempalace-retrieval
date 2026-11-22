@@ -2,7 +2,9 @@
 
 [Русский](README.ru.md) · [MIT](LICENSE)
 
-A small Python reference implementation for searching agent memory without serving stale or inaccessible facts. It is an extraction from a local retrieval layer built around [MemPalace](https://github.com/MemPalace/mempalace) and a canonical fact store. [Memory Ledger](https://github.com/alexandryasukaitisss-cmd/memory-ledger) is the companion project for recording how facts change.
+At its simplest, this searches your notes so the answer comes from the current fact, not an old copy. If a fact was revoked, changed, or belongs to another project, it is not served.
+
+A small Python reference implementation for searching agent memory without stale or inaccessible facts. It is an extraction from a local retrieval layer built around [MemPalace](https://github.com/MemPalace/mempalace) and a canonical fact store. [Memory Ledger](https://github.com/alexandryasukaitisss-cmd/memory-ledger) is the companion project for recording how facts change.
 
 **Search from the current facts.** Reject out-of-scope, revoked, or outdated snapshots before they take up ranking slots. Combine phrase, word, optional embedding, and fresh-record results. Skip weak matches and check the canonical record again before returning it.
 
