@@ -1,5 +1,9 @@
 # MemPalace Retrieval
 
+[![CI](https://github.com/alexandryasukaitisss-cmd/mempalace-retrieval/actions/workflows/ci.yml/badge.svg)](https://github.com/alexandryasukaitisss-cmd/mempalace-retrieval/actions/workflows/ci.yml)
+
+> **Works standalone with any Python memory or RAG store** (zero MemPalace dependency required) — permission-first hybrid retrieval with Reciprocal Rank Fusion, stale-fact rejection, and evidence-based abstention.
+
 [Русский](README.ru.md) · [MIT](LICENSE)
 
 At its simplest, this searches your notes so the answer comes from the current fact, not an old copy. If a fact was revoked, changed, or belongs to another project, it is not served.
@@ -42,3 +46,13 @@ print(hits[0].memory.text)
 The host supplies the caller's authorized scopes and an authoritative record reader; the query never selects permissions. The reader returns the full current record or None. Keep revision, scope, status, timestamp, and content in the indexed snapshot. Supply recent canonical records via **fresh** to bridge index lag. Optional embeddings must use the same space and dimensions. Rank fusion combines the ordered lanes; its score is not a probability.
 
 This version scans small in-memory snapshots. It does not open a MemPalace database or run an embedding model. Use an authorization-aware, coherent store and enforce access when serving results. The second read catches changes observed before that check; it cannot prevent later changes. Calibrate evidence thresholds on your own retrieval tasks. See [design and attribution](NOTICE.md).
+
+## Local-First Agent Memory Stack
+
+This repository is part of a modular, local-first stack for reliable AI agent memory (each component works standalone):
+
+| Layer | Repository | Responsibility |
+| --- | --- | --- |
+| **1. Temporal Fact Ledger** | [memory-ledger](https://github.com/alexandryasukaitisss-cmd/memory-ledger) | Append-only SQLite event journal, provenance, `A → B → A` supersession, conflict rollback vs retraction |
+| **2. Permission-First Retrieval** | [mempalace-retrieval](https://github.com/alexandryasukaitisss-cmd/mempalace-retrieval) | Scope filtering before ranking, Reciprocal Rank Fusion, stale-fact rejection, evidence-based abstention |
+| **3. Vector Space Integrity** | [embedding-contract](https://github.com/alexandryasukaitisss-cmd/embedding-contract) | Fails fast on model/dimension/prefix drift across Ollama Gemma and optional Gemini embeddings |
