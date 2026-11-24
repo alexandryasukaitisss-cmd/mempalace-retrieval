@@ -114,6 +114,22 @@ class RetrievalTest(unittest.TestCase):
         self.assertEqual([hit.memory.memory_id for hit in hits], ["earlier", "pickup"])
         self.assertEqual(retrieve("train pickup", records[::-1] + records, **params), hits)
 
+    def test_offline_benchmark_shows_zero_leaks_and_full_recall(self):
+        import benchmark
+
+        metrics = benchmark.run_benchmark()
+        guarded = metrics["mempalace_retrieval"]
+        naive = metrics["naive"]
+        self.assertEqual(guarded["active_recall"], [6, 6])
+        self.assertEqual(guarded["fresh_update_recall"], [4, 4])
+        self.assertEqual(guarded["cross_scope_leaks"], [0, 6])
+        self.assertEqual(guarded["stale_fact_leaks"], [0, 4])
+        self.assertEqual(guarded["revoked_fact_leaks"], [0, 4])
+        self.assertEqual(guarded["unsupported_false_positives"], [0, 4])
+        self.assertGreater(naive["cross_scope_leaks"][0], 0)
+        self.assertGreater(naive["stale_fact_leaks"][0], 0)
+        self.assertIn("| Naive index search | MemPalace Retrieval |", benchmark.format_markdown(metrics))
+
 
 if __name__ == "__main__":
     unittest.main()

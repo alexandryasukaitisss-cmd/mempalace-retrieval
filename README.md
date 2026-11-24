@@ -23,6 +23,24 @@ python3 -B -m unittest discover -s tests -v
 
 The demo shows a dispatch window changing from Tuesday to Thursday: the old index stops answering, and the fresh record can answer before the index is rebuilt.
 
+## Before / After Benchmark (Offline 24-Query Suite)
+
+Run the reproducible offline benchmark (`python3 -B benchmark.py`) comparing a naive index-only retriever against `mempalace-retrieval` on 24 queries covering active recall, pre-reindex updates, cross-scope private records, stale revisions, revoked facts, and weak-overlap noise:
+
+| Metric (24-query offline suite) | Naive index search | MemPalace Retrieval |
+| --- | --- | --- |
+| Active in-scope recall (higher is better) | 6/6 (100%) | **6/6 (100%)** |
+| Updated-fact recall before reindex (higher is better) | 0/4 (0%) | **4/4 (100%)** |
+| Cross-scope private leaks (lower is better) | 6/6 (100%) | **0/6 (0%)** |
+| Stale-revision answers served (lower is better) | 4/4 (100%) | **0/4 (0%)** |
+| Revoked-fact answers served (lower is better) | 4/4 (100%) | **0/4 (0%)** |
+| Unsupported weak-match false positives (lower is better) | 4/4 (100%) | **0/4 (0%)** |
+
+```sh
+python3 -B benchmark.py
+python3 -B benchmark.py --json
+```
+
 ## Companion: vector identity
 
 The retrieval layer does not produce embeddings. Its logical continuation is **[Embedding Contract](https://github.com/alexandryasukaitisss-cmd/embedding-contract)**: provider-neutral identity, safe backfill, local Gemma via Ollama, and an explicit Gemini adapter. Use it to ensure that only vectors from the same model, dimensions, and prompt contract share an index.
